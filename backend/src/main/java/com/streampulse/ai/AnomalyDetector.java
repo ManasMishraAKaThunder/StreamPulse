@@ -1,4 +1,4 @@
-package main.java.com.streampulse.ai;
+package com.streampulse.ai;
 
 public class AnomalyDetector {
     

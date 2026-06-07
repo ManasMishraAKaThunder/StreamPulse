@@ -1,4 +1,4 @@
-package main.java.com.streampulse.controller;
+package com.streampulse.controller;
 
 public class Eventcontroller {
     
