@@ -13,7 +13,7 @@ public class Event {
 
     @Id
     private String id;
-    private String type;        
+    private String type;        // e.g. user_clicked, order_placed
     private String userId;
     private String region;
     private Object payload;
