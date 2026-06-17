@@ -20,6 +20,7 @@ target/
 *.ipr
 *.emv
 *.xml
+*.pdf
 
 ### NetBeans ###
 /nbproject/private/
