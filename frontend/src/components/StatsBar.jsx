@@ -1,37 +1,23 @@
-export default function StatsBar({ total, anomalies, eventsPerSec, connected }) {
+export default function StatsBar({ total, anomalies, eventsPerSec }) {
   const stats = [
-    { label: "Total Events", value: total, accent: "#378ADD", bg: "#E6F1FB" },
-    { label: "Anomalies Flagged", value: anomalies, accent: "#E24B4A", bg: "#FCEBEB" },
-    { label: "Events / sec", value: eventsPerSec.toFixed(1), accent: "#1D9E75", bg: "#E1F5EE" },
-    {
-      label: "Stream",
-      value: connected ? "Live" : "Offline",
-      accent: connected ? "#1D9E75" : "#E24B4A",
-      bg: connected ? "#E1F5EE" : "#FCEBEB",
-    },
+    { label: "Total Events",     value: total.toLocaleString(), delta: "+12.4% vs last window", deltaUp: true,  accent: "#378ADD" },
+    { label: "Anomalies Flagged", value: anomalies,              delta: `${anomalies} this session`,deltaUp: false, accent: "#E24B4A" },
+    { label: "Events / sec",     value: eventsPerSec.toFixed(1), delta: "peak measured",           deltaUp: true,  accent: "#1D9E75" },
+    { label: "Avg Latency",      value: "18ms",                  delta: "p99: 42ms",               deltaUp: true,  accent: "#EF9F27" },
   ];
-
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px" }}>
-      {stats.map((s) => (
-        <div
-          key={s.label}
-          style={{
-            background: "#18181b",
-            border: "1px solid #27272a",
-            borderRadius: "12px",
-            padding: "20px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "6px",
-          }}
-        >
-          <span style={{ fontSize: "12px", color: "#71717a", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }}>
+      {stats.map(s => (
+        <div key={s.label} style={{ background: "#111113", border: "1px solid #1f1f23", borderRadius: "10px", padding: "16px" }}>
+          <div style={{ fontSize: "11px", color: "#52525b", letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: "8px" }}>
             {s.label}
-          </span>
-          <span style={{ fontSize: "28px", fontWeight: "600", color: s.accent }}>
+          </div>
+          <div style={{ fontSize: "26px", fontWeight: "500", color: s.accent, lineHeight: 1 }}>
             {s.value}
-          </span>
+          </div>
+          <div style={{ fontSize: "11px", marginTop: "6px", color: s.deltaUp ? "#1D9E75" : "#E24B4A" }}>
+            {s.delta}
+          </div>
         </div>
       ))}
     </div>
