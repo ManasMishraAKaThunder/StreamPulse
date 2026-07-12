@@ -30,7 +30,9 @@ public class SlidingWindowCounter {
 
     private AnomalyResult evaluate(int currentCount) {
         if (history.size() < 3) {
-            return new AnomalyResult(false, 0.0, currentCount); // not enough history to judge yet
+            // Fallback to a hardcoded threshold while we don't have enough history to calculate a Z-score
+            boolean isAnomaly = currentCount > 20;
+            return new AnomalyResult(isAnomaly, isAnomaly ? 99.9 : 0.0, currentCount); 
         }
 
         double mean = history.stream().mapToInt(Integer::intValue).average().orElse(0.0);
