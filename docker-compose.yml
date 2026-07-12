@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.9.0
@@ -9,6 +7,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "2181:2181"
+    networks:
+      - streampulse-net
 
   kafka:
     image: confluentinc/cp-kafka:7.9.0
@@ -20,9 +20,11 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://streampulse-kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
+    networks:
+      - streampulse-net
 
   mongodb:
     image: mongo:7.0
@@ -31,6 +33,37 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    networks:
+      - streampulse-net
+
+  api:
+    build: ./backend
+    container_name: streampulse-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - kafka
+      - mongodb
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://streampulse-mongo:27017/streampulse
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: streampulse-kafka:9092
+    networks:
+      - streampulse-net
+    restart: on-failure
+
+  frontend:
+    build: ./frontend
+    container_name: streampulse-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    networks:
+      - streampulse-net
+
+networks:
+  streampulse-net:
+    driver: bridge
 
 volumes:
   mongo-data:

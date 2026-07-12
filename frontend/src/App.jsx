@@ -49,8 +49,8 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080/ws/events");
-    wsRef.current = ws;
+    const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const ws = new WebSocket(`${wsProtocol}//${window.location.host}/ws/events`);
     ws.onopen = () => setConnected(true);
     ws.onclose = () => setConnected(false);
     ws.onmessage = (msg) => {
