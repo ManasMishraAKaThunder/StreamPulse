@@ -12,11 +12,12 @@ public class Eventservice {
 
     private final EventRepository eventRepository;
     private final kafkaProducer kafkaProducer;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
-    public Eventservice(EventRepository eventRepository, kafkaProducer kafkaProducer) {
+    public Eventservice(EventRepository eventRepository, kafkaProducer kafkaProducer, ObjectMapper objectMapper) {
         this.eventRepository = eventRepository;
         this.kafkaProducer = kafkaProducer;
+        this.objectMapper = objectMapper;
     }
 
     public Event publishEvent(Event event) throws Exception {

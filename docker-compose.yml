@@ -47,6 +47,7 @@ services:
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://streampulse-mongo:27017/streampulse
       SPRING_KAFKA_BOOTSTRAP_SERVERS: streampulse-kafka:9092
+      SPRING_DATA_MONGODB_DATABASE: streampulse
     networks:
       - streampulse-net
     restart: on-failure
