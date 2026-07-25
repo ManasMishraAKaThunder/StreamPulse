@@ -1,28 +1,29 @@
 package com.streampulse.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.streampulse.kafka.kafkaProducer;
 import com.streampulse.model.Event;
 import com.streampulse.repository.EventRepository;
-import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 public class Eventservice {
 
     private final EventRepository eventRepository;
     private final kafkaProducer kafkaProducer;
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public Eventservice(EventRepository eventRepository, kafkaProducer kafkaProducer, ObjectMapper objectMapper) {
+    public Eventservice(EventRepository eventRepository, kafkaProducer kafkaProducer) {
         this.eventRepository = eventRepository;
         this.kafkaProducer = kafkaProducer;
-        this.objectMapper = objectMapper;
     }
 
     public Event publishEvent(Event event) throws Exception {
-        Event saved = eventRepository.save(event);          // generates the Mongo _id
-        String eventJson = objectMapper.writeValueAsString(saved); // now includes that id
+        Event saved = eventRepository.save(event);
+        String eventJson = objectMapper.writeValueAsString(saved);
         kafkaProducer.sendEvent(eventJson);
         return saved;
     }
